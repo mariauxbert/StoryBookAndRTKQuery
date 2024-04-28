@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, FlatList, Text } from 'react-native';
-import { useAppDispatch, useAppSelector } from "./../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
 import { addNote, noteSelector, Note } from '../redux/slices/notesslice';
+import Styles from "./Styles";
 
-//
-import { useAddNewDataMutation, useGetDataByIdQuery, useGetDataQuery } from "./../RTKQuery/services/GetApiCall";
+import { useAddNewDataMutation, useGetDataByIdQuery, useGetDataQuery } from "../RTKQuery/services/GetApiCall";
 const Notes = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const dispatch = useAppDispatch();
     const notes = useAppSelector(noteSelector);
-    //console.log("notes",notes);
-    //const {data,isLoading,isError,isFetching}=useGetDataQuery();
     const { data, isLoading, isError, isFetching } = useGetDataByIdQuery("1");
-    //console.log("data", data);
-
 
     const [addData] = useAddNewDataMutation();
-
-
 
     const handleSaveNote = async () => {
 
@@ -30,13 +24,13 @@ const Notes = () => {
         // Here you can handle saving the note, for example, sending it to an API or saving it locally
         console.log('Title:', title);
         console.log('Content:', content);
-     const res= await   addData({
+        const res = await addData({
             title: title,
             description: content
 
         })
         console.log("res", res);
-        
+
 
         dispatch(addNote({ title, content }))
         // Resetting fields after saving
@@ -45,19 +39,19 @@ const Notes = () => {
     };
 
     return (
-        <View style={{ marginTop: 100 }}>
+        <View style={Styles.container}>
             <TextInput
                 placeholder="Title"
                 value={title}
                 onChangeText={text => setTitle(text)}
-                style={{ borderWidth: 1, borderColor: 'gray', margin: 10, padding: 10 }}
+                style={Styles.textInput}
             />
             <TextInput
                 placeholder="Content"
                 value={content}
                 onChangeText={text => setContent(text)}
                 multiline
-                style={{ borderWidth: 1, borderColor: 'gray', margin: 10, padding: 10, height: 100 }}
+                style={Styles.input}
             />
             <Button title="Save" onPress={handleSaveNote} />
             <FlatList
